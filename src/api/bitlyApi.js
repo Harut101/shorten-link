@@ -6,7 +6,7 @@ export function getAccessToken() {
   return {
     call(code) {
       controller = new AbortController();
-      return http.post(`https://bitly.com/oauth/access_token`, null, {
+      return http.post(`https://api-ssl.bitly.com/access_token`, null, {
         signal: controller.signal,
         headers: {
           "Content-Type": "application/x-www-form-urlencoded",
