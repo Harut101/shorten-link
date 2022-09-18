@@ -8,6 +8,9 @@ export function getAccessToken() {
       controller = new AbortController();
       return http.post(`https://bitly.com/oauth/access_token`, null, {
         signal: controller.signal,
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded",
+        },
         params: {
           client_id: process.env.REACT_APP_BITLY_CLIENT_ID,
           client_secret: process.env.REACT_APP_BITLY_CLIENT_SECRET,
