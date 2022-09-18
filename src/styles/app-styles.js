@@ -1,7 +1,7 @@
 import { makeStyles } from "@material-ui/core/styles";
 
-const useStyles = makeStyles((theme) => ({
-  appClass: {
+const useAppStyles = makeStyles((theme) => ({
+  app: {
     width: "100%",
     minHeight: "100vh",
     position: "relative",
@@ -10,7 +10,7 @@ const useStyles = makeStyles((theme) => ({
     backgroundColor: "#e5e5e5",
   },
 
-  bodyClass: {
+  appBody: {
     padding: "20px 10px",
 
     [theme.breakpoints.up("md")]: {
@@ -19,4 +19,4 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default useStyles;
+export default useAppStyles;

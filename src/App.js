@@ -1,15 +1,18 @@
 import Header from "./components/header/Header";
 import Container from "@mui/material/Container";
-import useStyles from "./styles/main-styles";
+import useAppStyles from "./styles/app-styles";
+import Pages from "./pages";
 import "./App.css";
 
 function App() {
-  const { appClass, bodyClass } = useStyles();
+  const { app, appBody } = useAppStyles();
 
   return (
-    <div className={appClass}>
+    <div className={app}>
       <Header />
-      <Container className={bodyClass}>Body</Container>
+      <Container className={appBody}>
+        <Pages />
+      </Container>
     </div>
   );
 }

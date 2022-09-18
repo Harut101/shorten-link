@@ -4,12 +4,12 @@ import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 
-export default function Header() {
+function Header() {
   return (
-    <Box sx={{ flexGrow: 1 }}>
+    <Box>
       <AppBar position="static">
         <Toolbar sx={{ display: "flex", justifyContent: "space-between" }}>
-          <Typography variant="h6" component="div">
+          <Typography variant="h6" component="p">
             shorten links app
           </Typography>
           <Button color="inherit">Logout</Button>
@@ -18,3 +18,5 @@ export default function Header() {
     </Box>
   );
 }
+
+export default Header;
