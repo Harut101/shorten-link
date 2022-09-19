@@ -23,7 +23,7 @@ function OauthRedirect() {
         try {
           const response = await auth.call();
           console.log(response);
-          localStorage.setItem("access_token", response.access_token);
+          //localStorage.setItem("access_token", response.access_token);
           navigate("/");
         } catch (e) {
           if (e?.message !== "canceled") {
