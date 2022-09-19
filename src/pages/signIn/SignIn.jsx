@@ -12,7 +12,7 @@ function SignIn() {
   const isAuth = useAuth();
 
   useEffect(() => {
-    if (isAuth) {
+    if (isAuth === true) {
       navigate("/");
     }
   }, [isAuth, navigate]);

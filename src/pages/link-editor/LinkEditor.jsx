@@ -8,7 +8,7 @@ function LinkEditor() {
   const isAuth = useAuth();
 
   useEffect(() => {
-    if (!isAuth) {
+    if (isAuth === false) {
       navigate("/sign-in");
     }
   }, [isAuth, navigate]);
