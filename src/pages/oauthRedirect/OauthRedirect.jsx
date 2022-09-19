@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import Box from "@mui/material/Box";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import { parseSearchParams } from "../../helpers/parsers";
 import { getAccessToken } from "../../api/bitlyApi";
 import Typography from "@mui/material/Typography";
@@ -11,7 +11,7 @@ const getToken = getAccessToken();
 
 function OauthRedirect() {
   const location = useLocation();
-  const navigate = useNavigate();
+  //const navigate = useNavigate();
 
   const { redirect, redirectBlock, redirectTitle } = useRedirectStyles();
 
@@ -22,14 +22,10 @@ function OauthRedirect() {
       if (code) {
         try {
           const response = await getToken.call(code);
-          debugger;
           const { access_token, login } = parseSearchParams(response);
           localStorage.setItem("access_token", access_token);
           localStorage.setItem("login", login);
-          navigate("/link-editor");
-        } catch (e) {
-          navigate("/sign-in");
-        }
+        } catch (e) {}
       }
     }
 
@@ -38,7 +34,7 @@ function OauthRedirect() {
     return () => {
       getToken.cancel();
     };
-  }, [location, navigate]);
+  }, [location]);
 
   return (
     <Box className={redirect}>
