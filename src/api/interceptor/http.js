@@ -1,4 +1,5 @@
 import axios from "axios";
+import { signOut } from "../../services/account";
 const http = axios.create(null);
 
 http.interceptors.request.use(
@@ -21,10 +22,7 @@ http.interceptors.response.use(
   },
   (error) => {
     if (error.response && error.response.status === 401) {
-      localStorage.setItem("access_token");
-      localStorage.setItem("login");
-
-      window.location = `${window.location.host}/sign-in`;
+      return signOut();
     }
 
     return error.response && error.response.status === 400

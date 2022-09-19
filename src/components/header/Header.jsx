@@ -4,6 +4,7 @@ import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import PropTypes from "prop-types";
+import { signOut } from "../../services/account";
 
 function Header({ isAuth }) {
   return (
@@ -13,7 +14,11 @@ function Header({ isAuth }) {
           <Typography variant="h6" component="p">
             shorten links app
           </Typography>
-          {isAuth && <Button color="inherit">Logout</Button>}
+          {isAuth && (
+            <Button color="inherit" onClick={signOut}>
+              Sign Out
+            </Button>
+          )}
         </Toolbar>
       </AppBar>
     </Box>
