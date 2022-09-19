@@ -23,7 +23,7 @@ function OauthRedirect() {
         try {
           const response = await getToken.call(code);
           const { access_token, login } = parseSearchParams(response);
-
+          debugger;
           localStorage.setItem("access_token", access_token);
           localStorage.setItem("login", login);
           navigate("/link-editor");
