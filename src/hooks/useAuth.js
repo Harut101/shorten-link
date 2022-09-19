@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 
 const useAuth = () => {
-  const [isAuth, setIsAuth] = useState(false);
+  const [isAuth, setIsAuth] = useState(null);
 
   useEffect(() => {
     setIsAuth(
