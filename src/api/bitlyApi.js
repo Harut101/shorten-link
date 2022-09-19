@@ -31,14 +31,17 @@ export function getLinks() {
   return {
     call() {
       controller = new AbortController();
-      return http.get(
-        `https://api-ssl.bitly.com/v4/groups/${localStorage.getItem(
-          "login"
-        )}/bitlinks`,
-        {
-          signal: controller.signal,
-        }
-      );
+      return http.post(`https://api-ssl.bitly.com/oauth/access_token`, {
+        headers: {
+          Authorization: `Basic ${localStorage.getItem("access_token")}`,
+          "Content-Type": "application/x-www-form-urlencoded",
+        },
+        params: {
+          client_id: process.env.REACT_APP_BITLY_CLIENT_ID,
+          client_secret: process.env.REACT_APP_BITLY_CLIENT_SECRET,
+        },
+        signal: controller.signal,
+      });
     },
     cancel() {
       controller && controller.abort();
