@@ -4,9 +4,7 @@ const useAuth = () => {
   const [isAuth, setIsAuth] = useState(null);
 
   useEffect(() => {
-    setIsAuth(
-      !!(localStorage.getItem("access_token") && localStorage.getItem("login"))
-    );
+    setIsAuth(!!localStorage.getItem("access_token"));
   }, []);
 
   return isAuth;

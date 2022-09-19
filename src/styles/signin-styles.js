@@ -13,12 +13,15 @@ const useSignInStyles = makeStyles((theme) => ({
     flexDirection: "column",
     justifyContent: "space-between",
     alignItems: "center",
-    height: "150px",
     width: "100%",
     maxWidth: "400px",
     borderRadius: "8px",
-    padding: "20px",
+    padding: "40px",
     background: theme.palette.common.white,
+
+    [theme.breakpoints.down("sm")]: {
+      padding: "40px 20px",
+    },
   },
 
   signInTitle: {
@@ -26,14 +29,29 @@ const useSignInStyles = makeStyles((theme) => ({
     width: "100%",
     textAlign: "center",
     fontSize: "20px",
-    color: theme.palette.primary.main
+    marginBottom: "30px !important",
+    color: theme.palette.primary.main,
   },
 
   signInButton: {
     width: "100%",
     maxWidth: "300px",
-    backgroundColor: theme.palette.primary.main
-  }
+    marginTop: "30px !important",
+    backgroundColor: theme.palette.primary.main,
+
+    [theme.breakpoints.down("sm")]: {
+      maxWidth: "100%",
+    },
+  },
+
+  field: {
+    width: "100%",
+    maxWidth: "300px",
+
+    [theme.breakpoints.down("sm")]: {
+      maxWidth: "100%",
+    },
+  },
 }));
 
 export default useSignInStyles;
