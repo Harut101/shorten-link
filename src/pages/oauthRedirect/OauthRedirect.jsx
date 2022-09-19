@@ -26,6 +26,7 @@ function OauthRedirect() {
           //localStorage.setItem("access_token", response.access_token);
           navigate("/");
         } catch (e) {
+          console.log(e);
           if (e?.message !== "canceled") {
             navigate("/sign-in");
           }
