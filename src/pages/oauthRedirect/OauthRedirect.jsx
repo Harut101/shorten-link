@@ -22,11 +22,13 @@ function OauthRedirect() {
       if (code) {
         try {
           const response = await getToken.call(code);
+          console.log(response, 'red');
           const { access_token, login } = parseSearchParams(response);
           localStorage.setItem("access_token", access_token);
           localStorage.setItem("login", login);
           navigate("/");
         } catch (e) {
+          console.log(e, 'err');
           if (e?.message !== "canceled") {
             navigate("/sign-in");
           }
