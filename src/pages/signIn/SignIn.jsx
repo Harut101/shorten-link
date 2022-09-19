@@ -28,7 +28,8 @@ function SignIn() {
 
   async function logIn(formFields) {
     try {
-      const response = await auth.call();
+      const { email, password } = formFields;
+      const response = await auth.call(email, password);
       localStorage.setItem("access_token", response?.data?.access_token);
       navigate("/");
     } catch (e) {

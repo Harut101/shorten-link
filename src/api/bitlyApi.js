@@ -25,7 +25,7 @@ export function getAccessToken() {
   };
 }
 
-export function authorize() {
+export function authorize(email, password) {
   let controller = null;
 
   return {
@@ -40,8 +40,8 @@ export function authorize() {
         },
         params: {
           grant_type: "password",
-          username: "arutaydinyan@gmail.com",
-          password: "!Hajime666!",
+          username: email,
+          password: password,
         },
         signal: controller.signal,
       });
