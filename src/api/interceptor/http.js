@@ -1,10 +1,10 @@
 import axios from "axios";
+import { signOut } from "../../services/account";
 const http = axios.create(null);
 
 http.interceptors.request.use(
   (axiosConfig) => {
-    console.log(axiosConfig);
-    if ((!axiosConfig.headers["Content-Type"])) {
+    if (!axiosConfig.headers["Content-Type"]) {
       if (axiosConfig.method === "post" || axiosConfig.method === "put") {
         axiosConfig.headers["Content-Type"] = "application/json";
       } else if (axiosConfig.method === "patch") {
@@ -18,14 +18,13 @@ http.interceptors.request.use(
 
 http.interceptors.response.use(
   (response) => {
-    const token = response.headers.access_token;
-    if (token) {
-      localStorage.setItem("authToken", token);
-    }
-    if (response.status === 200) return response.data;
     return response;
   },
   (error) => {
+    if (error.response && error.response.status === 401) {
+      return signOut();
+    }
+
     return error.response && error.response.status === 400
       ? Promise.reject({
           badRequest: true,
