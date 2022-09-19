@@ -33,9 +33,8 @@ export function authorize() {
       controller = new AbortController();
       return http.post(`https://api-ssl.bitly.com/oauth/access_token`, null, {
         headers: {
-          Authorization: `Basic ${Buffer.from(
-            `${process.env.REACT_APP_BITLY_CLIENT_ID}:${process.env.REACT_APP_BITLY_CLIENT_SECRET}`,
-            "base64"
+          Authorization: `Basic ${window.btoa(
+            `${process.env.REACT_APP_BITLY_CLIENT_ID}:${process.env.REACT_APP_BITLY_CLIENT_SECRET}`
           )}`,
           "Content-Type": "application/x-www-form-urlencoded",
         },
