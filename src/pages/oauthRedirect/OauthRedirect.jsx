@@ -2,12 +2,12 @@ import { useEffect } from "react";
 import Box from "@mui/material/Box";
 import { useLocation, useNavigate } from "react-router-dom";
 import { parseSearchParams } from "../../helpers/parsers";
-import { getAccessToken } from "../../api/bitlyApi";
+import { authorize } from "../../api/bitlyApi";
 import Typography from "@mui/material/Typography";
 import useRedirectStyles from "../../styles/redirect-styles";
 import LinearProgress from "@mui/material/LinearProgress";
 
-const getToken = getAccessToken();
+const auth = authorize();
 
 function OauthRedirect() {
   const location = useLocation();
@@ -21,10 +21,9 @@ function OauthRedirect() {
 
       if (code) {
         try {
-          const response = await getToken.call(code);
-          const { access_token, login } = parseSearchParams(response.data);
-          localStorage.setItem("access_token", access_token);
-          localStorage.setItem("login", login);
+          const response = await auth.call();
+          console.log(response);
+          localStorage.setItem("access_token", response.access_token);
           navigate("/");
         } catch (e) {
           if (e?.message !== "canceled") {
@@ -37,7 +36,7 @@ function OauthRedirect() {
     location?.search && get();
 
     return () => {
-      getToken.cancel();
+      auth.cancel();
     };
   }, [location, navigate]);
 

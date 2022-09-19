@@ -25,7 +25,7 @@ export function getAccessToken() {
   };
 }
 
-export function getLinks() {
+export function authorize() {
   let controller = null;
 
   return {
@@ -33,12 +33,16 @@ export function getLinks() {
       controller = new AbortController();
       return http.post(`https://api-ssl.bitly.com/oauth/access_token`, null, {
         headers: {
-          Authorization: `Basic ${localStorage.getItem("access_token")}`,
+          Authorization: `Basic ${Buffer.from(
+            `${process.env.REACT_APP_BITLY_CLIENT_ID}:${process.env.REACT_APP_BITLY_CLIENT_SECRET}`,
+            "base64"
+          )}`,
           "Content-Type": "application/x-www-form-urlencoded",
         },
         params: {
-          client_id: process.env.REACT_APP_BITLY_CLIENT_ID,
-          client_secret: process.env.REACT_APP_BITLY_CLIENT_SECRET,
+          grant_type: "password",
+          username: "arutaydinyan@gmail.com",
+          password: "!Hajime666!",
         },
         signal: controller.signal,
       });
