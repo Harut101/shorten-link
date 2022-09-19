@@ -25,11 +25,11 @@ export function getAccessToken() {
   };
 }
 
-export function authorize(email, password) {
+export function authorize() {
   let controller = null;
 
   return {
-    call() {
+    call(email, password) {
       controller = new AbortController();
       return http.post(`https://api-ssl.bitly.com/oauth/access_token`, null, {
         headers: {
