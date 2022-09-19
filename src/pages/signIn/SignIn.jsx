@@ -13,7 +13,7 @@ function SignIn() {
 
   useEffect(() => {
     if (isAuth) {
-      navigate("/link-editor");
+      navigate("/");
     }
   }, [isAuth, navigate]);
 
