@@ -1,6 +1,6 @@
 export function signOut() {
-  localStorage.setItem("access_token");
-  localStorage.setItem("login");
+  localStorage.removeItem("access_token");
+  localStorage.removeItem("login");
 
   window.location = `${window.location.host}/sign-in`;
 }
