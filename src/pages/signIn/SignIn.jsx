@@ -1,13 +1,18 @@
 import { useEffect } from "react";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
+import TextField from "@mui/material/TextField";
 import useSignInStyles from "../../styles/signin-styles";
 import Button from "@mui/material/Button";
 import useAuth from "../../hooks/useAuth";
 import { useNavigate } from "react-router-dom";
+import { authorize } from "../../api/bitlyApi";
+
+const auth = authorize();
 
 function SignIn() {
-  const { signIn, signInBlock, signInTitle, signInButton } = useSignInStyles();
+  const { signIn, signInBlock, signInTitle, signInButton, field } =
+    useSignInStyles();
   const navigate = useNavigate();
   const isAuth = useAuth();
 
@@ -17,18 +22,39 @@ function SignIn() {
     }
   }, [isAuth, navigate]);
 
-  function redirectToBitly() {
-    window.location = `${process.env.REACT_APP_BITLY_AUTHORIZE_URL}?client_id=${process.env.REACT_APP_BITLY_CLIENT_ID}&redirect_uri=${process.env.REACT_APP_REDIRECT_URL}`;
+  async function logIn() {
+    try {
+      const response = await auth.call();
+      localStorage.setItem("access_token", response?.data?.access_token);
+      navigate("/");
+    } catch (e) {
+      console.log(e);
+    }
   }
 
   return (
     <Box className={signIn}>
       <Box className={signInBlock}>
         <Typography variant="p" component="p" className={signInTitle}>
-          Sign in with Bitly
+          Sign in Bitly
         </Typography>
 
-        <Button className={signInButton} variant="contained" onClick={redirectToBitly}>
+        <TextField
+          id="outlined-basic"
+          label="Email"
+          variant="outlined"
+          className={field}
+          sx={{ marginBottom: "30px" }}
+        />
+
+        <TextField
+          id="outlined-basic"
+          label="Password"
+          variant="outlined"
+          className={field}
+        />
+
+        <Button className={signInButton} variant="contained" onClick={logIn}>
           Sign in
         </Button>
       </Box>
