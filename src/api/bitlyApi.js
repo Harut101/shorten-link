@@ -40,7 +40,7 @@ export function authorize() {
           "Content-Type": "application/x-www-form-urlencoded",
         },
         params: {
-          grant_type: password,
+          grant_type: "password",
           username: "arutaydinyan@gmail.com",
           password: "!Hajime666!",
         },

@@ -2,27 +2,27 @@ import { useEffect } from "react";
 import Box from "@mui/material/Box";
 import useAuth from "../../hooks/useAuth";
 import { useNavigate } from "react-router-dom";
-import { getLinks } from "../../api/bitlyApi";
+//import { getLinks } from "../../api/bitlyApi";
 
-const getBitlinks = getLinks();
+//const getBitlinks = getLinks();
 
 function LinkEditor() {
   const navigate = useNavigate();
   const isAuth = useAuth();
 
-  useEffect(() => {
-    async function get() {
-      let response = await getBitlinks.call();
+  // useEffect(() => {
+  //   async function get() {
+  //     let response = await getBitlinks.call();
 
-      console.log(response);
-    }
+  //     console.log(response);
+  //   }
 
-    get();
+  //   get();
 
-    return () => {
-      getBitlinks.cancel();
-    };
-  }, []);
+  //   return () => {
+  //     getBitlinks.cancel();
+  //   };
+  // }, []);
 
   useEffect(() => {
     if (isAuth === false) {
