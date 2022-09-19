@@ -31,7 +31,7 @@ export function getLinks() {
   return {
     call() {
       controller = new AbortController();
-      return http.post(`https://api-ssl.bitly.com/oauth/access_token`, {
+      return http.post(`https://api-ssl.bitly.com/oauth/access_token`, null, {
         headers: {
           Authorization: `Basic ${localStorage.getItem("access_token")}`,
           "Content-Type": "application/x-www-form-urlencoded",
