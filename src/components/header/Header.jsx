@@ -3,9 +3,9 @@ import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
-import { Link } from "react-router-dom";
+import PropTypes from "prop-types";
 
-function Header() {
+function Header({ isAuth }) {
   return (
     <Box>
       <AppBar position="static">
@@ -13,13 +13,19 @@ function Header() {
           <Typography variant="h6" component="p">
             shorten links app
           </Typography>
-          <Link to="sign-in">
-            <Button color="inherit">Logout</Button>
-          </Link>
+          {isAuth && <Button color="inherit">Logout</Button>}
         </Toolbar>
       </AppBar>
     </Box>
   );
 }
+
+Header.propTypes = {
+  isAuth: PropTypes.bool,
+};
+
+Header.defaultProps = {
+  isAuth: false,
+};
 
 export default Header;

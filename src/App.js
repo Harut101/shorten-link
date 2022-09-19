@@ -22,7 +22,7 @@ function App() {
 
   return (
     <div className={app}>
-      <Header />
+      <Header isAuth={isAuth} />
       <Container className={appBody}>
         <Pages />
       </Container>
