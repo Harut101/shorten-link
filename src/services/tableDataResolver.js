@@ -3,8 +3,8 @@ import moment from "moment";
 function dataResolve(data) {
   const columns = [
     { id: 1, field: "title", headerName: "Title", width: 200 },
-    { id: 2, field: "shortLink", headerName: "Short Link", width: 200 },
-    { id: 3, field: "longLink", headerName: "Long Link", width: 200 },
+    { id: 2, field: "shortLink", headerName: "Short URL", width: 200 },
+    { id: 3, field: "longLink", headerName: "Long URL", width: 200 },
     { id: 4, field: "createdAt", headerName: "Create At", width: 200 },
   ];
 
