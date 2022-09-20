@@ -6,7 +6,7 @@ const userSlice = createSlice({
     loggedIn: false,
   },
   reducers: {
-    authorize(action) {
+    authorize(_, action) {
       return {
         ...action.payload,
         loggedIn: true,

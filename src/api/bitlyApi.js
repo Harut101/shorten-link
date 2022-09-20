@@ -26,3 +26,22 @@ export function authorizeApi() {
     },
   };
 }
+
+export function getLinks() {
+  let controller = null;
+
+  return {
+    call(group_guid) {
+      controller = new AbortController();
+      return http.get(
+        `https://api-ssl.bitly.com/v4/groups/${group_guid}/bitlinks`,
+        {
+          signal: controller.signal,
+        }
+      );
+    },
+    cancel() {
+      controller && controller.abort();
+    },
+  };
+}

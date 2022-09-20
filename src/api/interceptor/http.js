@@ -30,7 +30,7 @@ http.interceptors.response.use(
     return response;
   },
   (error) => {
-    if (error.response && error.response.status === 401) {
+    if (error.response?.status === 401 || error.response?.status === 403) {
       return signOut();
     }
 
