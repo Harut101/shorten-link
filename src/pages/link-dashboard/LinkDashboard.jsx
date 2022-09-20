@@ -10,6 +10,7 @@ import { addLinks } from "../../store/reducers/linksReducers";
 import DataTable from "../../components/dataTable/DataTable";
 import tableDataResolver from "../../services/tableDataResolver";
 import useDashboardStyles from "./link-dashboard-styles";
+import CreateModal from "./section/createModal/CreateModal";
 
 const getBitlinks = getLinks();
 
@@ -20,6 +21,7 @@ function LinkDashboard() {
   const user = useSelector((state) => state.user);
   const [tableData, setTableData] = useState({});
   const [pagination, setPagination] = useState({});
+  const [openModal, setOpenModal] = useState(false);
   const isAuth = useAuth();
 
   useEffect(() => {
@@ -50,8 +52,8 @@ function LinkDashboard() {
     };
   }, [user.loggedIn, get]);
 
-  function onPageChange(page) {
-    get(page);
+  function onPageChange(_, page) {
+    get(page + 1);
   }
 
   return (
@@ -60,7 +62,7 @@ function LinkDashboard() {
         <Typography variant="p" component="p" className={dashboardTitle}>
           Links
         </Typography>
-        <Button variant="contained" onClick={() => null}>
+        <Button variant="contained" onClick={() => setOpenModal(true)}>
           Create new
         </Button>
       </Box>
@@ -74,6 +76,11 @@ function LinkDashboard() {
           onPageChange={onPageChange}
         />
       </Box>
+      <CreateModal
+        open={openModal}
+        onClose={() => setOpenModal(false)}
+        onCreate={() => null}
+      />
     </Box>
   );
 }

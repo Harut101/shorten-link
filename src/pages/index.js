@@ -1,7 +1,7 @@
 import { lazy, Suspense } from "react";
 import { Routes, Route } from "react-router-dom";
 const SignIn = lazy(() => import("./signIn/SignIn"));
-const LinkDashboard = lazy(() => import("./link-editor/LinkDashboard"));
+const LinkDashboard = lazy(() => import("./link-dashboard/LinkDashboard"));
 
 function Pages() {
   return (
