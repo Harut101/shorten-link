@@ -31,11 +31,15 @@ export function getLinks() {
   let controller = null;
 
   return {
-    call(group_guid) {
+    call(group_guid, page, size) {
       controller = new AbortController();
       return http.get(
         `https://api-ssl.bitly.com/v4/groups/${group_guid}/bitlinks`,
         {
+          params: {
+            size,
+            page,
+          },
           signal: controller.signal,
         }
       );
