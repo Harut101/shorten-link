@@ -11,7 +11,7 @@ import "./App.css";
 const getUser = getUserApi();
 
 function App() {
-  const { app, appBody } = useAppStyles();
+  const classes = useAppStyles();
   const user = useSelector((state) => state.user);
   const dispatch = useDispatch();
 
@@ -27,9 +27,9 @@ function App() {
   }, [user, dispatch]);
 
   return (
-    <div className={app}>
+    <div className={classes.app}>
       <Header isAuth={user.loggedIn} />
-      <Container className={appBody}>
+      <Container className={classes.container}>
         <Pages />
       </Container>
     </div>

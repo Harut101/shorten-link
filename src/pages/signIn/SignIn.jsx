@@ -3,11 +3,11 @@ import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
-import { useDispatch } from "react-redux";
-import useSignInStyles from "../../styles/signin-styles";
+import useSignInStyles from "./signin-styles";
 import useAuth from "../../hooks/useAuth";
 import useForm from "../../hooks/useForm";
 import fieldValidators from "../../helpers/fieldValidators";
+import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { authorizeApi } from "../../api/bitlyApi";
 import { getUserApi } from "../../api/userApi";
@@ -18,7 +18,7 @@ const getUser = getUserApi();
 const { required } = fieldValidators;
 
 function SignIn() {
-  const { signIn, signInBlock, signInTitle, signInButton, field } = useSignInStyles();
+  const classes = useSignInStyles();
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const isAuth = useAuth();
@@ -44,9 +44,9 @@ function SignIn() {
   }
 
   return (
-    <Box className={signIn}>
-      <Box className={signInBlock}>
-        <Typography variant="p" component="p" className={signInTitle}>
+    <Box className={classes.signIn}>
+      <Box className={classes.block}>
+        <Typography variant="p" component="p" className={classes.title}>
           Sign in Bitly
         </Typography>
 
@@ -54,7 +54,7 @@ function SignIn() {
           id="outlined-basic"
           label="Email"
           variant="outlined"
-          className={field}
+          className={classes.field}
           sx={{ marginBottom: "30px" }}
           error={!!errors.email}
           helperText={errors.email}
@@ -65,13 +65,13 @@ function SignIn() {
           id="outlined-basic"
           label="Password"
           variant="outlined"
-          className={field}
+          className={classes.field}
           error={!!errors.password}
           helperText={errors.password}
           {...register("password")}
         />
 
-        <Button className={signInButton} variant="contained" onClick={onSubmit}>
+        <Button className={classes.button} variant="contained" onClick={onSubmit}>
           Sign in
         </Button>
       </Box>
