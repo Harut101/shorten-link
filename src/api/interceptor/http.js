@@ -11,12 +11,9 @@ http.interceptors.request.use(
     }
 
     if (!axiosConfig.headers["Content-Type"]) {
-      if (axiosConfig.method === "post" || axiosConfig.method === "put") {
-        axiosConfig.headers["Content-Type"] = "application/json";
-      } else if (axiosConfig.method === "patch") {
-        axiosConfig.headers["Content-Type"] = "application/json-patch+json";
-      }
+      axiosConfig.headers["Content-Type"] = "application/json";
     }
+
     return axiosConfig;
   },
   (error) => Promise.reject(error)
