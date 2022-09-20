@@ -2,20 +2,25 @@ import { useEffect } from "react";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import TextField from "@mui/material/TextField";
-import useSignInStyles from "../../styles/signin-styles";
 import Button from "@mui/material/Button";
+import { useDispatch } from "react-redux";
+import useSignInStyles from "../../styles/signin-styles";
 import useAuth from "../../hooks/useAuth";
 import useForm from "../../hooks/useForm";
 import fieldValidators from "../../helpers/fieldValidators";
 import { useNavigate } from "react-router-dom";
-import { authorize } from "../../api/bitlyApi";
+import { authorizeApi } from "../../api/bitlyApi";
+import { getUserApi } from "../../api/userApi";
+import { authorize } from "../../store/reducers/userReducer";
 
-const auth = authorize();
+const auth = authorizeApi();
+const getUser = getUserApi();
 const { required } = fieldValidators;
 
 function SignIn() {
   const { signIn, signInBlock, signInTitle, signInButton, field } = useSignInStyles();
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const isAuth = useAuth();
 
   const { register, errors, onSubmit } = useForm(formSchema, logIn);
@@ -29,8 +34,9 @@ function SignIn() {
   async function logIn(formFields) {
     try {
       const { email, password } = formFields;
-      const response = await auth.call(email, password);
-      localStorage.setItem("access_token", response?.data?.access_token);
+      await auth.call(email, password);
+      const { data: userData } = await getUser.call();
+      dispatch(authorize(userData));
       navigate("/");
     } catch (e) {
       console.log(e);
