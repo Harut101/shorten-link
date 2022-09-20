@@ -11,10 +11,11 @@ import tableDataResolver from "../../services/tableDataResolver";
 const getBitlinks = getLinks();
 
 function LinkEditor() {
-  const user = useSelector((state) => state.user);
-  const [tableData, setTableData] = useState({});
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const user = useSelector((state) => state.user);
+  const [tableData, setTableData] = useState({});
+  const [pagination, setPagination] = useState({});
   const isAuth = useAuth();
 
   useEffect(() => {
@@ -24,18 +25,23 @@ function LinkEditor() {
   }, [isAuth, navigate]);
 
   useEffect(() => {
-    async function get() {
-      let { data } = await getBitlinks.call(user.default_group_guid);
-      dispatch(addLinks(data?.links));
-      setTableData(tableDataResolver(data?.links));
-    }
-
     user.loggedIn && get();
 
     return () => {
       getBitlinks.cancel();
     };
-  }, [user.loggedIn, user.default_group_guid, dispatch]);
+  }, [user.loggedIn]);
+
+  async function get(page = 1, size = 5) {
+    let { data } = await getBitlinks.call(user.default_group_guid, page, size);
+    dispatch(addLinks(data?.links));
+    setTableData(tableDataResolver(data?.links));
+    setPagination(data?.pagination);
+  }
+
+  function onPageChange(page) {
+    get(page);
+  }
 
   return (
     <Box>
@@ -44,9 +50,10 @@ function LinkEditor() {
         <DataTable
           rows={tableData.rows}
           columns={tableData.columns}
-          pageSize={5}
+          page={pagination.page}
+          total={pagination.total}
           perPage={5}
-          onPageChange={() => null}
+          onPageChange={onPageChange}
         />
       </Box>
     </Box>

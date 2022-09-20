@@ -9,7 +9,7 @@ import TablePagination from "@mui/material/TablePagination";
 import TableRow from "@mui/material/TableRow";
 import useAppStyles from "../../styles/app-styles";
 
-function DataTable({ rows, columns, pageSize, perPage, onPageChange }) {
+function DataTable({ rows, columns, page, total, perPage, onPageChange }) {
   const { table } = useAppStyles();
   return (
     <Paper>
@@ -50,15 +50,14 @@ function DataTable({ rows, columns, pageSize, perPage, onPageChange }) {
           </TableBody>
         </Table>
       </TableContainer>
-      {/* <TablePagination
-        rowsPerPageOptions={[10, 25, 100]}
+      <TablePagination
+        rowsPerPageOptions={[5]}
         component="div"
-        count={rows.length}
-        rowsPerPage={rowsPerPage}
-        page={page}
-        onPageChange={handleChangePage}
-        onRowsPerPageChange={handleChangeRowsPerPage}
-      /> */}
+        count={total}
+        rowsPerPage={perPage}
+        page={page - 1}
+        onPageChange={onPageChange}
+      />
     </Paper>
   );
 }
@@ -66,16 +65,18 @@ function DataTable({ rows, columns, pageSize, perPage, onPageChange }) {
 DataTable.propTypes = {
   rows: PropTypes.array,
   columns: PropTypes.array,
-  pageSize: PropTypes.number,
+  total: PropTypes.number,
   perPage: PropTypes.number,
+  page: PropTypes.number,
   onPageChange: PropTypes.func,
 };
 
 DataTable.defaultProps = {
   rows: [],
   columns: [],
-  pageSize: 5,
+  total: 5,
   perPage: 5,
+  page: 1,
   onPageChange: () => {},
 };
 
