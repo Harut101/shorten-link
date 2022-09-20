@@ -7,8 +7,12 @@ const linksSlice = createSlice({
     addLinks(_, action) {
       return action.payload;
     },
+
+    addLink(state, action) {
+      state.push(action.payload);
+    },
   },
 });
 
-export const { addLinks } = linksSlice.actions;
+export const { addLinks, addLink } = linksSlice.actions;
 export default linksSlice.reducer;

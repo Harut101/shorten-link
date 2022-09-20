@@ -49,3 +49,23 @@ export function getLinks() {
     },
   };
 }
+
+export function shortenLink() {
+  let controller = null;
+
+  return {
+    call(long_url) {
+      controller = new AbortController();
+      return http.post(
+        `https://api-ssl.bitly.com/v4/shorten`,
+        { long_url },
+        {
+          signal: controller.signal,
+        }
+      );
+    },
+    cancel() {
+      controller && controller.abort();
+    },
+  };
+}

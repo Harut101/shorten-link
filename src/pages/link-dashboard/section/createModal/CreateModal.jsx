@@ -21,7 +21,7 @@ function CreateModal({ open, onClose, onCreate }) {
       fullWidth
     >
       <DialogTitle id="alert-dialog-title" sx={{ fontWeight: "bold" }}>
-        Short link
+        Shorten link
       </DialogTitle>
       <DialogContent>
         <Box sx={{ width: "100%" }}>
