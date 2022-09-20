@@ -16,7 +16,7 @@ const getBitlinks = getLinks();
 const shortenBitlinks = shortenLink();
 
 function LinkDashboard() {
-  const { dashboard, dashboardHeader, dashboardTitle } = useDashboardStyles();
+  const classes = useDashboardStyles();
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const user = useSelector((state) => state.user);
@@ -66,10 +66,12 @@ function LinkDashboard() {
     [dispatch]
   );
 
+  const closeModal = useCallback(() => setOpenModal(false), []);
+
   return (
-    <Box className={dashboard}>
-      <Box className={dashboardHeader}>
-        <Typography variant="p" component="p" className={dashboardTitle}>
+    <Box className={classes.dashboard}>
+      <Box className={classes.header}>
+        <Typography variant="p" component="p" className={classes.title}>
           Links
         </Typography>
         <Button variant="contained" onClick={() => setOpenModal(true)}>
@@ -88,7 +90,7 @@ function LinkDashboard() {
       </Box>
       <CreateModal
         open={openModal}
-        onClose={() => setOpenModal(false)}
+        onClose={closeModal}
         onCreate={createLink}
       />
     </Box>
