@@ -4,11 +4,11 @@ const http = axios.create(null);
 
 http.interceptors.request.use(
   (axiosConfig) => {
-    // const token = localStorage.getItem("access_token");
+    const token = localStorage.getItem("access_token");
 
-    // if (token) {
-    //   axiosConfig.headers["Authorization"] = `Bearer ${token}`;
-    // }
+    if (token) {
+      axiosConfig.headers["Authorization"] = `Bearer ${token}`;
+    }
 
     if (!axiosConfig.headers["Content-Type"]) {
       if (axiosConfig.method === "post" || axiosConfig.method === "put") {
@@ -24,6 +24,9 @@ http.interceptors.request.use(
 
 http.interceptors.response.use(
   (response) => {
+    if (response?.data?.access_token) {
+      localStorage.setItem("access_token", response?.data?.access_token);
+    }
     return response;
   },
   (error) => {
