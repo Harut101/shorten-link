@@ -79,11 +79,14 @@ function LinkDashboard() {
   const createLink = useCallback(
     async ({ url }) => {
       try {
+        setOpenModal(false);
+        setLoading(true);
         const { data } = await shortenBitlinks.call(url);
         dispatch(addLink(data));
-        setOpenModal(false);
+        setLoading(false);
       } catch (e) {
         console.log(e);
+        setLoading(false);
       }
     },
     [dispatch]
@@ -101,11 +104,10 @@ function LinkDashboard() {
           Create new
         </Button>
       </Box>
-      {loading && (
-        <Box sx={{ width: "100%", mb: "30px" }}>
-          <LinearProgress />
-        </Box>
-      )}
+
+      <Box sx={{ width: "100%", mb: "30px" }}>
+        {loading && <LinearProgress />}
+      </Box>
 
       {!loading && links.length === 0 && (
         <Box sx={{ width: "100%", mb: "30px" }}>
