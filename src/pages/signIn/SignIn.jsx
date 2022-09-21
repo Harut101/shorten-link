@@ -1,3 +1,4 @@
+import { useState } from "react";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import TextField from "@mui/material/TextField";
@@ -11,6 +12,7 @@ import { useNavigate } from "react-router-dom";
 import { authorizeApi } from "../../api/bitlyApi";
 import { getUserApi } from "../../api/userApi";
 import { authorize } from "../../store/reducers/userReducer";
+import Alert from "../../components/alert/Alert";
 
 const auth = authorizeApi();
 const getUser = getUserApi();
@@ -20,6 +22,7 @@ function SignIn() {
   const classes = useSignInStyles();
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const [error, setError] = useState({});
   useAuth(true, "/");
 
   const { register, errors, onSubmit } = useForm(formSchema, logIn);
@@ -33,6 +36,7 @@ function SignIn() {
       navigate("/");
     } catch (e) {
       console.log(e);
+      setError({ message: e.message });
     }
   }
 
@@ -72,6 +76,12 @@ function SignIn() {
           Sign in
         </Button>
       </Box>
+      <Alert
+        open={!!error.message}
+        message={error.message}
+        type="error"
+        onClose={() => setError({})}
+      />
     </Box>
   );
 }

@@ -36,7 +36,7 @@ http.interceptors.response.use(
           badRequest: true,
           response: error.response.data,
         })
-      : Promise.reject(error);
+      : Promise.reject(error.response.data);
   }
 );
 
