@@ -1,4 +1,6 @@
 export function signOut() {
-  // localStorage.removeItem("access_token");
-  // window.location.assign(`${window.location.host}/sign-in`);
+  if (localStorage.getItem("access_token")) {
+    localStorage.removeItem("access_token");
+    window.location.assign(`/sign-in`);
+  }
 }
