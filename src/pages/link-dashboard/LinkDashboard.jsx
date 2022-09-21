@@ -20,6 +20,7 @@ function LinkDashboard() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const user = useSelector((state) => state.user);
+  const links = useSelector((state) => state.links);
   const [tableData, setTableData] = useState({});
   const [pagination, setPagination] = useState({});
   const [openModal, setOpenModal] = useState(false);
@@ -31,6 +32,12 @@ function LinkDashboard() {
     }
   }, [isAuth, navigate]);
 
+  useEffect(() => {
+    if (links.length) {
+      setTableData(tableDataResolver(links));
+    }
+  }, [links]);
+
   const get = useCallback(
     async (page = 1, size = 5) => {
       let { data } = await getBitlinks.call(
@@ -39,7 +46,6 @@ function LinkDashboard() {
         size
       );
       dispatch(addLinks(data?.links));
-      setTableData(tableDataResolver(data?.links));
       setPagination(data?.pagination);
     },
     [user.default_group_guid, dispatch]
