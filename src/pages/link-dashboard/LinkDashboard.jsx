@@ -11,6 +11,7 @@ import tableDataResolver from "../../services/tableDataResolver";
 import useDashboardStyles from "./link-dashboard-styles";
 import CreateModal from "./section/createModal/CreateModal";
 import debounce from "../../helpers/debounce";
+import LinearProgress from "@mui/material/LinearProgress";
 
 const getBitlinks = getLinks();
 const shortenBitlinks = shortenLink();
@@ -23,6 +24,8 @@ function LinkDashboard() {
   const [tableData, setTableData] = useState({});
   const [pagination, setPagination] = useState({});
   const [openModal, setOpenModal] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [firstRender, setFirstRender] = useState(true);
   useAuth(false, "/sign-in");
 
   useEffect(() => {
@@ -40,10 +43,14 @@ function LinkDashboard() {
             page,
             size
           );
+          setFirstRender(false);
           dispatch(addLinks(data?.links));
           setPagination(data?.pagination);
+          setLoading(false);
         } catch (e) {
           console.log(e);
+          setLoading(false);
+          setFirstRender(false);
         }
       }, 500),
     [user.default_group_guid, dispatch]
@@ -65,6 +72,7 @@ function LinkDashboard() {
   }, [user.loggedIn, get]);
 
   function onPageChange(_, page) {
+    setLoading(true);
     get(page + 1);
   }
 
@@ -93,16 +101,37 @@ function LinkDashboard() {
           Create new
         </Button>
       </Box>
-      <Box sx={{ width: "100%" }}>
-        <DataTable
-          rows={tableData.rows}
-          columns={tableData.columns}
-          page={pagination.page}
-          total={pagination.total}
-          perPage={5}
-          onPageChange={onPageChange}
-        />
-      </Box>
+      {loading && (
+        <Box sx={{ width: "100%", mb: "30px" }}>
+          <LinearProgress />
+        </Box>
+      )}
+
+      {!loading && links.length === 0 && (
+        <Box sx={{ width: "100%", mb: "30px" }}>
+          <Typography
+            variant="p"
+            component="p"
+            sx={{ textAlign: "center" }}
+            className={classes.title}
+          >
+            You haven't got a Links yet
+          </Typography>
+        </Box>
+      )}
+
+      {!firstRender && links.length > 0 && (
+        <Box sx={{ width: "100%" }}>
+          <DataTable
+            rows={tableData.rows}
+            columns={tableData.columns}
+            page={pagination.page}
+            total={pagination.total}
+            perPage={5}
+            onPageChange={onPageChange}
+          />
+        </Box>
+      )}
       {openModal && (
         <CreateModal
           open={openModal}

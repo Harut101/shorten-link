@@ -15,9 +15,10 @@ const useDashboardStyles = makeStyles(() => ({
     marginBottom: "40px",
     display: "flex",
     justifyContent: "space-between",
+    alignItems: "center",
   },
 
- title: {
+  title: {
     fontWeight: "bold",
     fontSize: "20px",
   },

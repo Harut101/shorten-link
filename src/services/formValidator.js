@@ -1,4 +1,4 @@
-const validateForm = (formFields, formValidators, value = null) => {
+function validateForm(formFields, formValidators, value = null) {
   const errors = {};
   for (const field in formValidators) {
     const fieldValidators = formValidators[field];
@@ -17,6 +17,6 @@ const validateForm = (formFields, formValidators, value = null) => {
   }
 
   return errors;
-};
+}
 
 export default validateForm;
