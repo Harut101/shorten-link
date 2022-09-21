@@ -65,6 +65,7 @@ function SignIn() {
           id="outlined-basic"
           label="Password"
           variant="outlined"
+          type="password"
           className={classes.field}
           error={!!errors.password}
           helperText={errors.password}
