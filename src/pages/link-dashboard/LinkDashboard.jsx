@@ -22,7 +22,7 @@ function LinkDashboard() {
   const user = useSelector((state) => state.user);
   const links = useSelector((state) => state.links);
   const [tableData, setTableData] = useState({});
-  const [pagination, setPagination] = useState({});
+  const [pagination, setPagination] = useState({ page: 1, total: 1 });
   const [openModal, setOpenModal] = useState(false);
   const [loading, setLoading] = useState(true);
   const [firstRender, setFirstRender] = useState(true);
@@ -83,13 +83,14 @@ function LinkDashboard() {
         setLoading(true);
         const { data } = await shortenBitlinks.call(url);
         dispatch(addLink(data));
+        setPagination({ ...pagination, total: pagination.total + 1 });
         setLoading(false);
       } catch (e) {
         console.log(e);
         setLoading(false);
       }
     },
-    [dispatch]
+    [pagination, dispatch]
   );
 
   const closeModal = useCallback(() => setOpenModal(false), []);
