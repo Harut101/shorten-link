@@ -39,7 +39,7 @@ function SignIn() {
     } catch (e) {
       console.log(e);
       setLoading(false);
-      setError({ message: e.message });
+      e?.message && setError({ message: e.message });
     }
   }
 
