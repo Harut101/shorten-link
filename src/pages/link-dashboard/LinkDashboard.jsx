@@ -1,16 +1,16 @@
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState, useCallback, useMemo } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import useAuth from "../../hooks/useAuth";
-import { useNavigate } from "react-router-dom";
 import { getLinks, shortenLink } from "../../api/bitlyApi";
 import { addLinks, addLink } from "../../store/reducers/linksReducers";
 import DataTable from "../../components/dataTable/DataTable";
 import tableDataResolver from "../../services/tableDataResolver";
 import useDashboardStyles from "./link-dashboard-styles";
 import CreateModal from "./section/createModal/CreateModal";
+import debounce from "../../helpers/debounce";
 
 const getBitlinks = getLinks();
 const shortenBitlinks = shortenLink();
@@ -18,19 +18,12 @@ const shortenBitlinks = shortenLink();
 function LinkDashboard() {
   const classes = useDashboardStyles();
   const dispatch = useDispatch();
-  const navigate = useNavigate();
   const user = useSelector((state) => state.user);
   const links = useSelector((state) => state.links);
   const [tableData, setTableData] = useState({});
   const [pagination, setPagination] = useState({});
   const [openModal, setOpenModal] = useState(false);
-  const isAuth = useAuth();
-
-  useEffect(() => {
-    if (isAuth === false) {
-      navigate("/sign-in");
-    }
-  }, [isAuth, navigate]);
+  useAuth(false, "/sign-in");
 
   useEffect(() => {
     if (links.length) {
@@ -38,21 +31,29 @@ function LinkDashboard() {
     }
   }, [links]);
 
-  const get = useCallback(
-    async (page = 1, size = 5) => {
-      try {
-        let { data } = await getBitlinks.call(
-          user.default_group_guid,
-          page,
-          size
-        );
-        dispatch(addLinks(data?.links));
-        setPagination(data?.pagination);
-      } catch (e) {
-        console.log(e);
-      }
-    },
+  const debouncedGet = useMemo(
+    () =>
+      debounce(async ({ page, size }) => {
+        try {
+          let { data } = await getBitlinks.call(
+            user.default_group_guid,
+            page,
+            size
+          );
+          dispatch(addLinks(data?.links));
+          setPagination(data?.pagination);
+        } catch (e) {
+          console.log(e);
+        }
+      }, 500),
     [user.default_group_guid, dispatch]
+  );
+
+  const get = useCallback(
+    (page = 1, size = 5) => {
+      debouncedGet({ page, size });
+    },
+    [debouncedGet]
   );
 
   useEffect(() => {
@@ -102,11 +103,13 @@ function LinkDashboard() {
           onPageChange={onPageChange}
         />
       </Box>
-      <CreateModal
-        open={openModal}
-        onClose={closeModal}
-        onCreate={createLink}
-      />
+      {openModal && (
+        <CreateModal
+          open={openModal}
+          onClose={closeModal}
+          onCreate={createLink}
+        />
+      )}
     </Box>
   );
 }

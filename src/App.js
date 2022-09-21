@@ -18,8 +18,8 @@ function App() {
   useEffect(() => {
     async function get() {
       try {
-        const { data: userData } = await getUser.call();
-        dispatch(authorize(userData));
+        const response = await getUser.call();
+        response?.data && dispatch(authorize(response.data));
       } catch (e) {
         console.log(e);
       }

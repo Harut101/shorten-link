@@ -1,8 +1,8 @@
-import { useEffect } from "react";
+import { useState } from "react";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import TextField from "@mui/material/TextField";
-import Button from "@mui/material/Button";
+import LoadingButton from "@mui/lab/LoadingButton";
 import useSignInStyles from "./signin-styles";
 import useAuth from "../../hooks/useAuth";
 import useForm from "../../hooks/useForm";
@@ -12,27 +12,25 @@ import { useNavigate } from "react-router-dom";
 import { authorizeApi } from "../../api/bitlyApi";
 import { getUserApi } from "../../api/userApi";
 import { authorize } from "../../store/reducers/userReducer";
+import Alert from "../../components/alert/Alert";
 
 const auth = authorizeApi();
 const getUser = getUserApi();
-const { required } = fieldValidators;
+const { required, email } = fieldValidators;
 
 function SignIn() {
   const classes = useSignInStyles();
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const isAuth = useAuth();
+  const [error, setError] = useState({});
+  const [loading, setLoading] = useState(false);
+  useAuth(true, "/");
 
   const { register, errors, onSubmit } = useForm(formSchema, logIn);
 
-  useEffect(() => {
-    if (isAuth === true) {
-      navigate("/");
-    }
-  }, [isAuth, navigate]);
-
   async function logIn(formFields) {
     try {
+      setLoading(true);
       const { email, password } = formFields;
       await auth.call(email, password);
       const { data: userData } = await getUser.call();
@@ -40,6 +38,8 @@ function SignIn() {
       navigate("/");
     } catch (e) {
       console.log(e);
+      setLoading(false);
+      setError({ message: e.message });
     }
   }
 
@@ -71,10 +71,21 @@ function SignIn() {
           {...register("password")}
         />
 
-        <Button className={classes.button} variant="contained" onClick={onSubmit}>
+        <LoadingButton
+          loading={loading}
+          className={classes.button}
+          variant="contained"
+          onClick={onSubmit}
+        >
           Sign in
-        </Button>
+        </LoadingButton>
       </Box>
+      <Alert
+        open={!!error.message}
+        message={error.message}
+        type="error"
+        onClose={() => setError({})}
+      />
     </Box>
   );
 }
@@ -86,7 +97,7 @@ const formSchema = {
   },
 
   validators: {
-    email: [required()],
+    email: [required(), email("invalid email")],
     password: [required()],
   },
 };

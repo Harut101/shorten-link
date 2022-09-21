@@ -16,7 +16,7 @@ function dataResolve(data) {
 function resolveRows(data) {
   return data.map((dataItem) => ({
     id: dataItem.id,
-    title: dataItem.title,
+    title: dataItem.title || "No Title",
     shortLink: dataItem.link,
     longLink: dataItem.long_url,
     createdAt: moment(dataItem.created_at).format("DD-MM-YYYY"),
