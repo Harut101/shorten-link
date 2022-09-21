@@ -40,13 +40,17 @@ function LinkDashboard() {
 
   const get = useCallback(
     async (page = 1, size = 5) => {
-      let { data } = await getBitlinks.call(
-        user.default_group_guid,
-        page,
-        size
-      );
-      dispatch(addLinks(data?.links));
-      setPagination(data?.pagination);
+      try {
+        let { data } = await getBitlinks.call(
+          user.default_group_guid,
+          page,
+          size
+        );
+        dispatch(addLinks(data?.links));
+        setPagination(data?.pagination);
+      } catch (e) {
+        console.log(e);
+      }
     },
     [user.default_group_guid, dispatch]
   );
@@ -65,9 +69,13 @@ function LinkDashboard() {
 
   const createLink = useCallback(
     async ({ url }) => {
-      const { data } = await shortenBitlinks.call(url);
-      dispatch(addLink(data));
-      setOpenModal(false);
+      try {
+        const { data } = await shortenBitlinks.call(url);
+        dispatch(addLink(data));
+        setOpenModal(false);
+      } catch (e) {
+        console.log(e);
+      }
     },
     [dispatch]
   );

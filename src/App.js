@@ -17,8 +17,12 @@ function App() {
 
   useEffect(() => {
     async function get() {
-      const { data: userData } = await getUser.call();
-      dispatch(authorize(userData));
+      try {
+        const { data: userData } = await getUser.call();
+        dispatch(authorize(userData));
+      } catch (e) {
+        console.log(e);
+      }
     }
 
     !user.loggedIn && get();
