@@ -10,14 +10,14 @@ const useDashboardStyles = makeStyles(() => ({
     alignItems: "center",
   },
 
-  dashboardHeader: {
+  header: {
     width: "100%",
     marginBottom: "40px",
     display: "flex",
     justifyContent: "space-between",
   },
 
-  dashboardTitle: {
+ title: {
     fontWeight: "bold",
     fontSize: "20px",
   },

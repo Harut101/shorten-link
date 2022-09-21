@@ -10,7 +10,7 @@ const useAppStyles = makeStyles((theme) => ({
     backgroundColor: "#e5e5e5",
   },
 
-  appBody: {
+  container: {
     padding: "20px 10px",
 
     [theme.breakpoints.up("md")]: {

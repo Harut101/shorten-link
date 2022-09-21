@@ -8,7 +8,7 @@ const useSignInStyles = makeStyles((theme) => ({
     justifyContent: "center",
   },
 
-  signInBlock: {
+ block: {
     display: "flex",
     flexDirection: "column",
     justifyContent: "space-between",
@@ -24,7 +24,7 @@ const useSignInStyles = makeStyles((theme) => ({
     },
   },
 
-  signInTitle: {
+ title: {
     fontWeight: "bold",
     width: "100%",
     textAlign: "center",
@@ -33,7 +33,7 @@ const useSignInStyles = makeStyles((theme) => ({
     color: theme.palette.primary.main,
   },
 
-  signInButton: {
+ button: {
     width: "100%",
     maxWidth: "300px",
     marginTop: "30px !important",

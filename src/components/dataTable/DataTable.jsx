@@ -7,13 +7,11 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TablePagination from "@mui/material/TablePagination";
 import TableRow from "@mui/material/TableRow";
-import useAppStyles from "../../styles/app-styles";
 
 function DataTable({ rows, columns, page, total, perPage, onPageChange }) {
-  const { table } = useAppStyles();
   return (
     <Paper>
-      <TableContainer className={table}>
+      <TableContainer>
         <Table>
           <TableHead>
             <TableRow>

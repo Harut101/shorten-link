@@ -16,10 +16,11 @@ const getBitlinks = getLinks();
 const shortenBitlinks = shortenLink();
 
 function LinkDashboard() {
-  const { dashboard, dashboardHeader, dashboardTitle } = useDashboardStyles();
+  const classes = useDashboardStyles();
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const user = useSelector((state) => state.user);
+  const links = useSelector((state) => state.links);
   const [tableData, setTableData] = useState({});
   const [pagination, setPagination] = useState({});
   const [openModal, setOpenModal] = useState(false);
@@ -31,16 +32,25 @@ function LinkDashboard() {
     }
   }, [isAuth, navigate]);
 
+  useEffect(() => {
+    if (links.length) {
+      setTableData(tableDataResolver(links));
+    }
+  }, [links]);
+
   const get = useCallback(
     async (page = 1, size = 5) => {
-      let { data } = await getBitlinks.call(
-        user.default_group_guid,
-        page,
-        size
-      );
-      dispatch(addLinks(data?.links));
-      setTableData(tableDataResolver(data?.links));
-      setPagination(data?.pagination);
+      try {
+        let { data } = await getBitlinks.call(
+          user.default_group_guid,
+          page,
+          size
+        );
+        dispatch(addLinks(data?.links));
+        setPagination(data?.pagination);
+      } catch (e) {
+        console.log(e);
+      }
     },
     [user.default_group_guid, dispatch]
   );
@@ -59,17 +69,23 @@ function LinkDashboard() {
 
   const createLink = useCallback(
     async ({ url }) => {
-      const { data } = await shortenBitlinks.call(url);
-      dispatch(addLink(data));
-      setOpenModal(false);
+      try {
+        const { data } = await shortenBitlinks.call(url);
+        dispatch(addLink(data));
+        setOpenModal(false);
+      } catch (e) {
+        console.log(e);
+      }
     },
     [dispatch]
   );
 
+  const closeModal = useCallback(() => setOpenModal(false), []);
+
   return (
-    <Box className={dashboard}>
-      <Box className={dashboardHeader}>
-        <Typography variant="p" component="p" className={dashboardTitle}>
+    <Box className={classes.dashboard}>
+      <Box className={classes.header}>
+        <Typography variant="p" component="p" className={classes.title}>
           Links
         </Typography>
         <Button variant="contained" onClick={() => setOpenModal(true)}>
@@ -88,7 +104,7 @@ function LinkDashboard() {
       </Box>
       <CreateModal
         open={openModal}
-        onClose={() => setOpenModal(false)}
+        onClose={closeModal}
         onCreate={createLink}
       />
     </Box>

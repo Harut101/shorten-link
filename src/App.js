@@ -11,14 +11,18 @@ import "./App.css";
 const getUser = getUserApi();
 
 function App() {
-  const { app, appBody } = useAppStyles();
+  const classes = useAppStyles();
   const user = useSelector((state) => state.user);
   const dispatch = useDispatch();
 
   useEffect(() => {
     async function get() {
-      const { data: userData } = await getUser.call();
-      dispatch(authorize(userData));
+      try {
+        const { data: userData } = await getUser.call();
+        dispatch(authorize(userData));
+      } catch (e) {
+        console.log(e);
+      }
     }
 
     !user.loggedIn && get();
@@ -27,9 +31,9 @@ function App() {
   }, [user, dispatch]);
 
   return (
-    <div className={app}>
+    <div className={classes.app}>
       <Header isAuth={user.loggedIn} />
-      <Container className={appBody}>
+      <Container className={classes.container}>
         <Pages />
       </Container>
     </div>
