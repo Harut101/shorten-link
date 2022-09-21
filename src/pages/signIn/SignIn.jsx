@@ -2,7 +2,7 @@ import { useState } from "react";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import TextField from "@mui/material/TextField";
-import Button from "@mui/material/Button";
+import LoadingButton from "@mui/lab/LoadingButton";
 import useSignInStyles from "./signin-styles";
 import useAuth from "../../hooks/useAuth";
 import useForm from "../../hooks/useForm";
@@ -16,19 +16,21 @@ import Alert from "../../components/alert/Alert";
 
 const auth = authorizeApi();
 const getUser = getUserApi();
-const { required } = fieldValidators;
+const { required, email } = fieldValidators;
 
 function SignIn() {
   const classes = useSignInStyles();
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [error, setError] = useState({});
+  const [loading, setLoading] = useState(false);
   useAuth(true, "/");
 
   const { register, errors, onSubmit } = useForm(formSchema, logIn);
 
   async function logIn(formFields) {
     try {
+      setLoading(true);
       const { email, password } = formFields;
       await auth.call(email, password);
       const { data: userData } = await getUser.call();
@@ -36,6 +38,7 @@ function SignIn() {
       navigate("/");
     } catch (e) {
       console.log(e);
+      setLoading(false);
       setError({ message: e.message });
     }
   }
@@ -68,13 +71,14 @@ function SignIn() {
           {...register("password")}
         />
 
-        <Button
+        <LoadingButton
+          loading={loading}
           className={classes.button}
           variant="contained"
           onClick={onSubmit}
         >
           Sign in
-        </Button>
+        </LoadingButton>
       </Box>
       <Alert
         open={!!error.message}
@@ -93,7 +97,7 @@ const formSchema = {
   },
 
   validators: {
-    email: [required()],
+    email: [required(), email("invalid email")],
     password: [required()],
   },
 };
