@@ -1,4 +1,3 @@
-import { useEffect } from "react";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import TextField from "@mui/material/TextField";
@@ -21,15 +20,9 @@ function SignIn() {
   const classes = useSignInStyles();
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const isAuth = useAuth();
+  useAuth(true, "/");
 
   const { register, errors, onSubmit } = useForm(formSchema, logIn);
-
-  useEffect(() => {
-    if (isAuth === true) {
-      navigate("/");
-    }
-  }, [isAuth, navigate]);
 
   async function logIn(formFields) {
     try {
@@ -71,7 +64,11 @@ function SignIn() {
           {...register("password")}
         />
 
-        <Button className={classes.button} variant="contained" onClick={onSubmit}>
+        <Button
+          className={classes.button}
+          variant="contained"
+          onClick={onSubmit}
+        >
           Sign in
         </Button>
       </Box>

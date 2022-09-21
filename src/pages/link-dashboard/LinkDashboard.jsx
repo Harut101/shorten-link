@@ -4,7 +4,6 @@ import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import useAuth from "../../hooks/useAuth";
-import { useNavigate } from "react-router-dom";
 import { getLinks, shortenLink } from "../../api/bitlyApi";
 import { addLinks, addLink } from "../../store/reducers/linksReducers";
 import DataTable from "../../components/dataTable/DataTable";
@@ -18,19 +17,12 @@ const shortenBitlinks = shortenLink();
 function LinkDashboard() {
   const classes = useDashboardStyles();
   const dispatch = useDispatch();
-  const navigate = useNavigate();
   const user = useSelector((state) => state.user);
   const links = useSelector((state) => state.links);
   const [tableData, setTableData] = useState({});
   const [pagination, setPagination] = useState({});
   const [openModal, setOpenModal] = useState(false);
-  const isAuth = useAuth();
-
-  useEffect(() => {
-    if (isAuth === false) {
-      navigate("/sign-in");
-    }
-  }, [isAuth, navigate]);
+  useAuth(false, "/sign-in");
 
   useEffect(() => {
     if (links.length) {
