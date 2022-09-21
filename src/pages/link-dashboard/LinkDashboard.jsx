@@ -1,4 +1,4 @@
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState, useCallback, useMemo } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
@@ -10,6 +10,7 @@ import DataTable from "../../components/dataTable/DataTable";
 import tableDataResolver from "../../services/tableDataResolver";
 import useDashboardStyles from "./link-dashboard-styles";
 import CreateModal from "./section/createModal/CreateModal";
+import debounce from "../../helpers/debounce";
 
 const getBitlinks = getLinks();
 const shortenBitlinks = shortenLink();
@@ -30,21 +31,29 @@ function LinkDashboard() {
     }
   }, [links]);
 
-  const get = useCallback(
-    async (page = 1, size = 5) => {
-      try {
-        let { data } = await getBitlinks.call(
-          user.default_group_guid,
-          page,
-          size
-        );
-        dispatch(addLinks(data?.links));
-        setPagination(data?.pagination);
-      } catch (e) {
-        console.log(e);
-      }
-    },
+  const debouncedGet = useMemo(
+    () =>
+      debounce(async ({ page, size }) => {
+        try {
+          let { data } = await getBitlinks.call(
+            user.default_group_guid,
+            page,
+            size
+          );
+          dispatch(addLinks(data?.links));
+          setPagination(data?.pagination);
+        } catch (e) {
+          console.log(e);
+        }
+      }, 500),
     [user.default_group_guid, dispatch]
+  );
+
+  const get = useCallback(
+    (page = 1, size = 5) => {
+      debouncedGet({ page, size });
+    },
+    [debouncedGet]
   );
 
   useEffect(() => {
@@ -94,11 +103,13 @@ function LinkDashboard() {
           onPageChange={onPageChange}
         />
       </Box>
-      <CreateModal
-        open={openModal}
-        onClose={closeModal}
-        onCreate={createLink}
-      />
+      {openModal && (
+        <CreateModal
+          open={openModal}
+          onClose={closeModal}
+          onCreate={createLink}
+        />
+      )}
     </Box>
   );
 }
