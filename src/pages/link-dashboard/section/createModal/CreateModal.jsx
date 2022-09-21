@@ -8,7 +8,7 @@ import DialogTitle from "@mui/material/DialogTitle";
 import useForm from "../../../../hooks/useForm";
 import fieldValidators from "../../../../helpers/fieldValidators";
 
-const { required } = fieldValidators;
+const { required, url } = fieldValidators;
 
 function CreateModal({ open, onClose, onCreate }) {
   const { register, errors, onSubmit } = useForm(formSchema, onCreate);
@@ -24,7 +24,7 @@ function CreateModal({ open, onClose, onCreate }) {
         Shorten link
       </DialogTitle>
       <DialogContent>
-        <Box sx={{ width: "100%" }}>
+        <Box sx={{ width: "100%", pt: "20px" }}>
           <TextField
             id="outlined-basic"
             label="Url"
@@ -54,7 +54,7 @@ const formSchema = {
   },
 
   validators: {
-    url: [required()],
+    url: [required(), url("invalid url")],
   },
 };
 

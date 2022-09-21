@@ -45,10 +45,30 @@ function email(message = "Value is invalid") {
   };
 }
 
+function url(message = "Value is invalid") {
+  return (value) => {
+    /* eslint-disable */
+    const valid =
+      /^https?:\/\/(?:www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b(?:[-a-zA-Z0-9()@:%_\+.~#?&\/=]*)$/.test(
+        value
+      );
+
+    if (!valid) {
+      return {
+        valid,
+        message,
+      };
+    }
+
+    return { valid };
+  };
+}
+
 const validators = {
   required,
   test,
   email,
+  url,
 };
 
 export default validators;
