@@ -92,8 +92,8 @@ function SignIn() {
 }
 
 const formSchema = {
-  initialValues: {
-    email: "",
+  fields: {
+    email: "AAA",
     password: "",
   },
 

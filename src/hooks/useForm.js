@@ -1,12 +1,14 @@
 import { useState, useCallback, useRef } from "react";
 import validateForm from "../services/formValidator";
+import getField from "../services/getField";
+import setFieldValue from "../services/setFieldValue";
 
 function isEmpty(obj) {
   return Object.keys(obj).length === 0;
 }
 
 const useForm = (schema, submitHandler) => {
-  const [formFields, setFormFields] = useState({ ...schema.initialValues });
+  const [formFields, setFormFields] = useState({ ...schema.fields });
   const [submitted, setSubmitted] = useState(false);
   const [errors, setErrors] = useState({});
   const fieldRefs = useRef({});
@@ -84,18 +86,22 @@ const useForm = (schema, submitHandler) => {
     [formFields, fieldRefs, schema.initialValues]
   );
 
-  const register = (name) => {
-    /* eslint-disable */
-    const fieldRef = useRef();
+  const register = useCallback(
+    (name) => {
+      return {
+        name,
+        ref: (_ref) => {
+          const fieldRef = getField(_ref);
 
-    fieldRefs.current[`${name}`] = fieldRef;
-
-    return {
-      name,
-      ref: fieldRef,
-      onChange,
-    };
-  };
+          if (fieldRef) {
+            setFieldValue(fieldRef, schema.fields[name]);
+          }
+        },
+        onChange,
+      };
+    },
+    [schema.fields]
+  );
 
   return {
     errors,
