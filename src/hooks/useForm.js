@@ -8,7 +8,7 @@ function isEmpty(obj) {
 }
 
 const useForm = (schema, submitHandler) => {
-  const [formFields, setFormFields] = useState({ ...schema.fields });
+  const [formFields] = useState({ ...schema.fields });
   const [submitted, setSubmitted] = useState(false);
   const [errors, setErrors] = useState({});
   const fieldRefs = useRef({});
@@ -57,17 +57,11 @@ const useForm = (schema, submitHandler) => {
     [submitted, errors, schema.validators]
   );
 
-  const setValue = useCallback(
-    (name, value) => {
-      if (fieldRefs.current[`${name}`].current) {
-        fieldRefs.current[`${name}`].current.value = value;
-      }
-      setFormFields({ ...formFields, [name]: value });
-    },
-    [formFields, fieldRefs]
-  );
+  const setValue = useCallback((name, value) => {
+    form.current[name] = value;
+  }, []);
 
-  const getValue = useCallback((name) => formFields[name], [formFields]);
+  const getValue = useCallback((name) => form.current[name], []);
 
   const setError = useCallback(
     (name, message) => setErrors({ ...errors, [name]: message }),
@@ -77,17 +71,12 @@ const useForm = (schema, submitHandler) => {
   const reset = useCallback(
     (name = null) => {
       if (name) {
-        setFormFields({ ...formFields, [name]: schema.initialValues[name] });
-        fieldRefs.current[`${name}`].current.value = schema.initialValues[name];
+        form.current[name] = formFields[name];
       } else {
-        setFormFields({ ...schema.initialValues });
-        for (const refName in fieldRefs.current) {
-          fieldRefs.current[refName].current.value =
-            schema.initialValues[refName];
-        }
+        form.current = { ...formFields };
       }
     },
-    [formFields, fieldRefs, schema.initialValues]
+    [formFields]
   );
 
   const register = useCallback(
@@ -98,7 +87,7 @@ const useForm = (schema, submitHandler) => {
           const fieldRef = getField(_ref);
 
           if (fieldRef) {
-            setFieldValue(fieldRef, formFields[name]);
+            setFieldValue(fieldRef, form.current[name]);
           }
         },
         onChange,
@@ -107,7 +96,7 @@ const useForm = (schema, submitHandler) => {
       fieldRefs.current[name] = fieldObj;
       return fieldObj;
     },
-    [formFields]
+    [form]
   );
 
   return {
