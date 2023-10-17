@@ -11,7 +11,7 @@ const useForm = (schema, submitHandler) => {
   const [formFields] = useState({ ...schema.fields });
   const [submitted, setSubmitted] = useState(false);
   const [errors, setErrors] = useState({});
-  const fieldRefs = useRef({});
+  //   const fieldRefs = useRef({});
   const form = useRef({ ...schema.fields });
 
   const onSubmit = useCallback(
@@ -43,18 +43,19 @@ const useForm = (schema, submitHandler) => {
           { [name]: schema.validators[name] },
           value
         );
-        const errorsClone = { ...errors };
 
-        if (isEmpty(validated)) {
-          delete errorsClone[name];
-        }
+        setErrors((errors) => {
+          const clone = { ...errors };
 
-        setErrors({ ...errorsClone, ...validated });
+          if (isEmpty(validated)) delete clone[name];
+
+          return { ...clone, ...validated };
+        });
       }
 
       form.current[name] = value;
     },
-    [submitted, errors, schema.validators]
+    [submitted, schema.validators]
   );
 
   const setValue = useCallback((name, value) => {
@@ -93,10 +94,9 @@ const useForm = (schema, submitHandler) => {
         onChange,
       };
 
-      fieldRefs.current[name] = fieldObj;
       return fieldObj;
     },
-    [form]
+    [form, onChange]
   );
 
   return {
