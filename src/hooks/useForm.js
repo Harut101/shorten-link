@@ -12,20 +12,24 @@ const useForm = (schema, submitHandler) => {
   const [submitted, setSubmitted] = useState(false);
   const [errors, setErrors] = useState({});
   const fieldRefs = useRef({});
+  const form = useRef({ ...schema.fields });
 
-  const onSubmit = (e) => {
-    e.preventDefault();
+  const onSubmit = useCallback(
+    (e) => {
+      e.preventDefault();
 
-    setSubmitted(true);
+      setSubmitted(true);
 
-    let errors = validateForm(formFields, schema.validators);
+      let errors = validateForm(form.current, schema.validators);
 
-    setErrors(errors);
+      setErrors(errors);
 
-    if (isEmpty(errors)) {
-      submitHandler(formFields);
-    }
-  };
+      if (isEmpty(errors)) {
+        submitHandler(form.current);
+      }
+    },
+    [submitHandler, schema.validators]
+  );
 
   const onChange = useCallback(
     (e) => {
@@ -35,7 +39,7 @@ const useForm = (schema, submitHandler) => {
 
       if (submitted) {
         const validated = validateForm(
-          formFields,
+          form,
           { [name]: schema.validators[name] },
           value
         );
@@ -48,9 +52,9 @@ const useForm = (schema, submitHandler) => {
         setErrors({ ...errorsClone, ...validated });
       }
 
-      setFormFields({ ...formFields, [name]: value });
+      form.current[name] = value;
     },
-    [formFields, submitted, errors, schema]
+    [submitted, errors, schema.validators]
   );
 
   const setValue = useCallback(
@@ -88,19 +92,22 @@ const useForm = (schema, submitHandler) => {
 
   const register = useCallback(
     (name) => {
-      return {
+      const fieldObj = {
         name,
         ref: (_ref) => {
           const fieldRef = getField(_ref);
 
           if (fieldRef) {
-            setFieldValue(fieldRef, schema.fields[name]);
+            setFieldValue(fieldRef, formFields[name]);
           }
         },
         onChange,
       };
+
+      fieldRefs.current[name] = fieldObj;
+      return fieldObj;
     },
-    [schema.fields]
+    [formFields]
   );
 
   return {
